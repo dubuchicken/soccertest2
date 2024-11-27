@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>축구 포지션 테스트</title>
+  <style>
+    body { font-family: Arial, sans-serif; text-align: center; margin: 20px; }
+    .question { margin: 20px 0; }
+    button { padding: 10px 20px; margin: 10px; cursor: pointer; }
+    #result { font-size: 1.2em; color: #007BFF; margin-top: 20px; }
+  </style>
+</head>
+<body>
+  <h1>나의 축구 포지션은?</h1>
+  <div id="quiz"></div>
+  <div id="result"></div>
+
+  <script>
+    const questions = [
+      {
+        text: "경기를 할 때 가장 중요하다고 생각하는 것은?",
+        options: [
+          { text: "① 공격력", role: "striker" },
+          { text: "② 수비력", role: "centerBack" },
+          { text: "③ 팀워크", role: "midfielder" },
+          { text: "④ 빠른 움직임", role: "wing" }
+        ]
+      },
+      {
+        text: "체력이 필요한 상황에서 당신은?",
+        options: [
+          { text: "① 끝까지 열심히 뛴다", role: "striker" },
+          { text: "② 효율적으로 움직인다", role: "midfielder" },
+          { text: "③ 팀을 위해 헌신한다", role: "centerBack" },
+          { text: "④ 넓은 공간을 커버한다", role: "wingBack" }
+        ]
+      },
+      {
+        text: "당신의 성격은 어떤 편인가요?",
+        options: [
+          { text: "① 열정적이고 리더십이 강하다", role: "striker" },
+          { text: "② 조용히 팀을 돕는다", role: "centerBack" },
+          { text: "③ 창의적이고 유연하다", role: "wing" },
+          { text: "④ 체계적이고 계획적이다", role: "midfielder" }
+        ]
+      },
+      {
+        text: "당신이 가장 즐기는 플레이 스타일은?",
+        options: [
+          { text: "① 골을 직접 넣는다", role: "striker" },
+          { text: "② 팀원에게 완벽한 패스를 준다", role: "midfielder" },
+          { text: "③ 측면에서 빠르게 움직인다", role: "wing" },
+          { text: "④ 상대 공격을 차단한다", role: "centerBack" }
+        ]
+      },
+      {
+        text: "팀에서 맡고 싶은 역할은?",
+        options: [
+          { text: "① 팀의 핵심 득점원", role: "striker" },
+          { text: "② 모든 것을 조율하는 중간다리", role: "midfielder" },
+          { text: "③ 측면에서 속도를 활용하는 역할", role: "wingBack" },
+          { text: "④ 안정적인 방어라인 구축", role: "centerBack" }
+        ]
+      }
+    ];
+
+    const roles = {
+      striker: 0,
+      midfielder: 0,
+      wing: 0,
+      centerBack: 0,
+      wingBack: 0
+    };
+
+    let currentQuestion = 0;
+
+    function loadQuestion() {
+      const quiz = document.getElementById('quiz');
+      const result = document.getElementById('result');
+      result.textContent = ""; // 결과 초기화
+
+      if (currentQuestion < questions.length) {
+        const question = questions[currentQuestion];
+        quiz.innerHTML = `
+          <div class="question">
+            <p>${question.text}</p>
+            ${question.options.map(option => `
+              <button onclick="answer('${option.role}')">${option.text}</button>
+            `).join("")}
+          </div>
+        `;
+      } else {
+        displayResult();
+      }
+    }
+
+    function answer(role) {
+      roles[role]++;
+      currentQuestion++;
+      loadQuestion();
+    }
+
+    function displayResult() {
+      const quiz = document.getElementById('quiz');
+      const result = document.getElementById('result');
+      quiz.innerHTML = ""; // 질문 영역 비우기
+
+      const maxRole = Object.keys(roles).reduce((a, b) => roles[a] > roles[b] ? a : b);
+      const positions = {
+        striker: "스트라이커(ST): 공격의 선봉에 서서 득점을 책임지는 플레이어!",
+        midfielder: "미드필더(CM): 팀을 조율하고 패스를 통해 경기를 풀어나가는 플레이어!",
+        wing: "윙(W): 측면에서 속도와 기술을 활용해 경기를 지배하는 플레이어!",
+        centerBack: "센터백(CB): 안정적인 수비로 팀을 보호하는 든든한 방어수!",
+        wingBack: "윙백(WB): 수비와 공격을 모두 커버하며 넓은 활동 반경을 자랑하는 플레이어!"
+      };
+
+      result.textContent = `당신의 포지션은: ${positions[maxRole]}`;
+    }
+
+    // 첫 번째 질문 로드
+    loadQuestion();
+  </script>
+</body>
+</html>
